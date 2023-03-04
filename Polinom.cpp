@@ -15,6 +15,21 @@ public:
             coefficients[i] = c[i];
         }
     }
+    // Копіюючий конструктор
+    Polynomial(const Polynomial& poly) {
+        degree = poly.degree;
+        coefficients = new int[degree + 1];
+        for (int i = 0; i <= degree; i++) {
+            coefficients[i] = poly.coefficients[i];
+        }
+    }
+    // Конструктор переміщення
+    Polynomial(Polynomial&& poly) noexcept {
+        degree = poly.degree;
+        coefficients = poly.coefficients;
+        poly.degree = 0;
+        poly.coefficients = nullptr;
+    }
 
     // Деструктор
     ~Polynomial() {
@@ -97,7 +112,7 @@ public:
     }
 
     // Сеттер для коефіцієнтів полінома
-    void setCoefficients(double* coeffs) {
+    void setCoefficients(int* coeffs) {
         for (int i = 0; i <= degree; i++) {
             coefficients[i] = coeffs[i];
         }
@@ -106,35 +121,35 @@ public:
     //Метод відображення полінома
     void Print() {
         if (degree == 0) {
-            std::cout << "0" << std::endl;
+            cout << "0" << endl;
             return;
         }
         if (coefficients[0] != 0) {
-            std::cout << coefficients[0];
+            cout << coefficients[0];
         }
         for (int i = 1; i < degree; i++) {
             if (coefficients[i] != 0) {
                 if (coefficients[i] > 0) {
-                    std::cout << " + ";
+                    cout << " + ";
                 }
                 else {
-                    std::cout << " - ";
+                    cout << " - ";
                 }
-                if (std::abs(coefficients[i]) != 1 || i == degree - 1) {
-                    std::cout << std::abs(coefficients[i]);
+                if (abs(coefficients[i]) != 1 || i == degree - 1) {
+                    cout << abs(coefficients[i]);
                 }
                 if (i == degree - 1) {
-                    std::cout << "x^" << i;
+                    cout << "x^" << i;
                 }
                 else {
-                    std::cout << "x";
+                    cout << "x";
                     if (i != 1) {
-                        std::cout << "^" << i;
+                        cout << "^" << i;
                     }
                 }
             }
         }
-        std::cout << std::endl;
+        cout << endl;
     }
 
     // Додавання константи до полінома
@@ -191,5 +206,15 @@ int main() {
 
     double result = p1.evaluate(x);             // Використовуємо метод обчислення значення полінома для заданого значення змінної(x)
     cout << "The value of the polynomial for x = " << x << " is " << result << endl; // Виводимо результат обчислення на консоль
+  
+    Polynomial p3(p1);                          //Використовуємо конструктор копіювання, створюємо поліном p3, що буде копією p1
+    cout << "p3=";
+    p3.Print();                                 //Виводимо поліном-копію на консоль, щоб порівняти
+    Polynomial p4(std::move(p1));               //Використовуємо конструктор переміщення(права власності на об'єкт  передає іншому об'єкту)
+    cout << "p4=";
+    p4.Print();
+    
+    cout << "And after moving p1 to p4, p1 is equal ";//Виводимо на консоль поліном права власності на який були передані та переконуємось, що поліном дорівнює нуля
+    p1.Print();
     return 0;
 }
