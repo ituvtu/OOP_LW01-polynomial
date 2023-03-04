@@ -191,7 +191,5 @@ int main() {
 
     double result = p1.evaluate(x);             // Використовуємо метод обчислення значення полінома для заданого значення змінної(x)
     cout << "The value of the polynomial for x = " << x << " is " << result << endl; // Виводимо результат обчислення на консоль
-    cout << "ok its checking git";
-    //i hope you see this
     return 0;
 }
